@@ -1,4 +1,4 @@
-# AWS Serverless Hit Counter
+# AWS Serverless Landing Page Counter
 
 Solução **serverless** para rastreamento e contabilização em tempo real de cliques em landing pages. O projeto foi desenvolvido com foco em **alta escalabilidade**, **baixa latência** e **baixo custo operacional**, utilizando o modelo **pay-per-use** da Amazon Web Services (AWS).
 
@@ -17,7 +17,7 @@ Solução **serverless** para rastreamento e contabilização em tempo real de c
 
 # 📖 Sobre o Projeto
 
-O **AWS Serverless Hit Counter** é uma aplicação desenvolvida para registrar e contabilizar cliques de usuários em landing pages de forma segura, escalável e totalmente serverless.
+O **AWS Serverless Landing Page Counter** é uma aplicação desenvolvida para registrar e contabilizar cliques de usuários em landing pages de forma segura, escalável e totalmente serverless.
 
 A arquitetura elimina a necessidade de gerenciamento de servidores, permitindo que a infraestrutura escale automaticamente conforme a demanda. O contador é atualizado em tempo real por meio de operações atômicas no banco de dados, garantindo consistência mesmo sob alto volume de acessos simultâneos.
 
@@ -80,7 +80,7 @@ A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos se
 ## Back-end
 
 * AWS Lambda
-* Python **ou** Node.js
+* Python
 
 ## Banco de Dados
 
@@ -95,7 +95,6 @@ A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos se
 ## Infraestrutura como Código (IaC)
 
 * AWS CloudFormation
-* Terraform
 
 ## Plataforma
 
