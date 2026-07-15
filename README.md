@@ -80,7 +80,7 @@ A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos se
 ## Back-end
 
 * AWS Lambda
-* Python **ou** Node.js
+* Python
 
 ## Banco de Dados
 
@@ -95,7 +95,6 @@ A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos se
 ## Infraestrutura como Código (IaC)
 
 * AWS CloudFormation
-* Terraform
 
 ## Plataforma
 
