@@ -19,9 +19,10 @@ body {
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 40px;
+    line-height: 1.2;
 }
 
 h1 span {
@@ -85,5 +86,5 @@ footer ul {
 
 footer li {
     font-size: 0.9rem;
-    color: #64748b;
+    color: #cbd5e1; 
 }
