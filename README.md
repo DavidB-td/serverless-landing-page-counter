@@ -31,9 +31,7 @@
   <img src="https://shields.io" alt="JavaScript"/>
 </p>
 
-
 ---
-
 
 # AWS Serverless Landing Page Counter
 
@@ -64,7 +62,7 @@ O **AWS Contador Serverless** é uma aplicação desenvolvida para registrar e c
 
 # 🎯 O Problema e a Solução
 
-O projeto simula o cenário de uma startup lançando uma campanha inédita com tráfego imprevisível. Como métricas indicam que 53% dos visitantes abandonam páginas que demoram mais de três segundos para carregar, a performance é crítica. 
+O projeto simula o cenário de uma startup lançando uma campanha inédita com tráfego imprevisível. Como métricas indicam que 53% dos visitantes abandonam páginas que demoram mais de três segundos para carregar, a performance é crítica.
 
 Para evitar gargalos de lentidão e travamentos sob demanda repentina, desenvolvemos essa arquitetura 100% serverless. Ela garante resiliência e tempos de resposta na casa dos milissegundos, escalando instantaneamente para absorver desde dezenas até milhões de acessos.
 
@@ -155,7 +153,6 @@ O modelo serverless adotado elimina qualquer custo com capacidade ociosa de serv
 # 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
-
 * **Python 3.x** instalado.
 * **AWS CLI** instalada e configurada com suas credenciais (`aws configure`).
 * **Boto3** (SDK da AWS para Python).
@@ -163,20 +160,20 @@ O modelo serverless adotado elimina qualquer custo com capacidade ociosa de serv
 ### Passo a Passo (Deploy Automatizado)
 
 1. **Clone o repositório:**
-   ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd <NOME_DO_REPOSITORIO>
-   ```
+```bash
+git clone <URL_DO_REPOSITORIO>
+cd <NOME_DO_REPOSITORIO>
+```
 
 2. **Instale a dependência do script:**
-   ```bash
-   pip install boto3
-   ```
+```bash
+pip install boto3
+```
 
 3. **Execute o pipeline de deploy:**
-   ```bash
-   python deploy.py
-   ```
+```bash
+python deploy.py
+```
 
 O script fará todo o fluxo pesado automaticamente:
 * Provisionamento/atualização da infraestrutura na AWS via CloudFormation (`iac/template.yaml`).
@@ -184,8 +181,7 @@ O script fará todo o fluxo pesado automaticamente:
 * Injeção automática da URL gerada no arquivo `frontend/script.js`.
 * Sincronização e upload dos arquivos web (`index.html`, `style.css`, `script.js`) para o bucket S3.
 
-4. **Acesse o projeto:**
-   Ao final da execução, o terminal exibirá a URL pública do site no S3 para você acessar e testar o contador em tempo real.
+4. **Acesse o projeto:** Ao final da execução, o terminal exibirá a URL pública do site no S3 para você acessar e testar o contador em tempo real.
 
 ---
 
