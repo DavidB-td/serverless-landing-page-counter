@@ -1,6 +1,6 @@
 // Será mudado automaticamente pelo script
 
-const API_URL = 'TROCA_SCRIPT/contador'
+const API_URL = 'TROCA_SCRIPT/contador';
 
 const btnClique = document.getElementById('btn-clique');
 const valorContador = document.getElementById('valor');

@@ -86,7 +86,7 @@ def main():
         with open(script_path, 'r', encoding='utf-8') as f:
             script_content = f.read()
 
-        padrao_regex = r"const API_URL = '.*?';"
+        padrao_regex = r"const API_URL = '.*?'[;]?"
         nova_linha_url = f"const API_URL = '{api_endpoint}/contador';"
         
         script_content_updated = re.sub(padrao_regex, nova_linha_url, script_content)

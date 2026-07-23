@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'DESCRIÇÃO A SER DECIDIDA'
+Description: 'Infraestrutura Serverless AWS (S3, API Gateway, Lambda, DynamoDB) para o Contador de Cliques de Interesse da Landing Page'
 
 Resources:
 
