@@ -17,11 +17,9 @@ def main():
     print("🚀 INICIANDO PIPELINE DE DEPLOY SERVERLESS")
     print("="*50)
 
-    # 1. Instanciando os clientes boto3
     cf_client = boto3.client('cloudformation', region_name=REGION)
     s3_client = boto3.client('s3', region_name=REGION)
 
-    # 2. Lendo o template CloudFormation
     try:
         with open(TEMPLATE_PATH, 'r', encoding='utf-8') as f:
             template_body = f.read()
@@ -29,7 +27,6 @@ def main():
         print(f"❌ Erro: Arquivo não encontrado em '{TEMPLATE_PATH}'.")
         return
 
-    # 3. Executando o Deploy da Infraestrutura
     print(f"\n[1/4] Avaliando a stack CloudFormation '{STACK_NAME}'...")
     waiter = None
     try:
@@ -63,7 +60,6 @@ def main():
         waiter.wait(StackName=STACK_NAME)
         print("✅ Infraestrutura provisionada/atualizada com sucesso!")
 
-    # 4. Extração dos Outputs diretamente da Stack
     print("\n[2/4] Extraindo Outputs e metadados da nuvem...")
     response = cf_client.describe_stacks(StackName=STACK_NAME)
     outputs = response['Stacks'][0].get('Outputs', [])
@@ -83,7 +79,6 @@ def main():
     print(f"🔗 API Endpoint gerado: {api_endpoint}")
     print(f"🪣 Bucket S3 de destino: {bucket_name}")
 
-    # 5. Injeção Dinâmica Idempotente da URL no Front-end (Regex)
     print("\n[3/4] Injetando variáveis no ambiente local...")
     script_path = os.path.join(FRONTEND_DIR, 'script.js')
     
@@ -91,7 +86,6 @@ def main():
         with open(script_path, 'r', encoding='utf-8') as f:
             script_content = f.read()
 
-        # Isso funciona perfeitamente mesmo que o script seja executado 100 vezes seguidas.
         padrao_regex = r"const API_URL = '.*?';"
         nova_linha_url = f"const API_URL = '{api_endpoint}/contador';"
         
@@ -104,7 +98,6 @@ def main():
         print(f"❌ Erro: Arquivo {script_path} não encontrado na pasta local.")
         return
 
-    # 6. Upload dos Arquivos (S3 Sync)
     print("\n[4/4] Sincronizando arquivos com o S3...")
     for root, dirs, files in os.walk(FRONTEND_DIR):
         for file in files:
@@ -124,7 +117,6 @@ def main():
             )
     print("✅ Sincronização concluída.")
 
-    # 7. Finalização
     print("\n" + "="*50)
     print("🎉 DEPLOY CONCLUÍDO COM SUCESSO!")
     print(f"🌐 Acesse a aplicação na web: {website_url}")
