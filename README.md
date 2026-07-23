@@ -10,7 +10,6 @@
   <!-- Plataforma & IaC -->
   <img src="https://shields.io" alt="AWS"/>
   <img src="https://shields.io" alt="AWS CloudFormation"/>
-  
   <!-- Back-end & Scripts -->
   <img src="https://shields.io" alt="Node.js"/>
   <img src="https://shields.io" alt="Python"/>
@@ -31,6 +30,7 @@
   <img src="https://shields.io" alt="CSS3"/>
   <img src="https://shields.io" alt="JavaScript"/>
 </p>
+
 
 ---
 
