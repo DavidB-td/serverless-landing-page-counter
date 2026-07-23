@@ -190,7 +190,7 @@ O script fará todo o fluxo pesado automaticamente:
 
 * **Bruno Ruan Lima Da Silva** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
 * **David Bezerra Da Silva** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
-* **Natan Ferreira Dos Santos** – [GitHub](https://github.com) | [LinkedIn][(https://linkedin.com)](https://br.linkedin.com/in/natansantos22)
+* **Natan Ferreira Dos Santos** – [GitHub](https://github.com) | [LinkedIn][(https://br.linkedin.com/in/natansantos22)]
 * **Gustavo Ramalho Matioli** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
 
 ---
