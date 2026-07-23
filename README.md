@@ -7,25 +7,29 @@ Solução **serverless** para rastreamento e contabilização em tempo real de c
 # 📋 Sumário
 
 * [Sobre o Projeto](#-sobre-o-projeto)
-* [Arquitetura](#-arquitetura-do-sistema)
-* [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+* [O Problema e a Solução](#-o-problema-e-a-solução)
+* [Arquitetura do Sistema](#-arquitetura-do-sistema)
 * [Funcionamento](#-funcionamento)
+* [Tecnologias Utilizadas](#%EF%B8%8F-tecnologias-utilizadas)
 * [Principais Características](#-principais-características)
+* [Otimização Financeira](#-otimização-financeira)
+* [Como Executar o Projeto](#-como-executar-o-projeto)
 * [Grupo 4 (AWS re/Start)](#-grupo-4-aws-restart)
+* [Licença](#-licença)
 
 ---
 
 # 📖 Sobre o Projeto
 
-O **AWS Contador Serverless** é uma aplicação desenvolvida para registrar e contabilizar cliques de usuários em landing pages de forma segura, escalável e totalmente serverless.
-
-A arquitetura elimina a necessidade de gerenciamento de servidores, permitindo que a infraestrutura escale automaticamente conforme a demanda. O contador é atualizado em tempo real por meio de operações atômicas no banco de dados, garantindo consistência mesmo sob alto volume de acessos simultâneos.
+O **AWS Contador Serverless** é uma aplicação desenvolvida para registrar e contabilizar cliques de usuários em landing pages de forma segura, escalável e totalmente serverless. A arquitetura elimina a necessidade de gerenciamento de servidores, permitindo que a infraestrutura escale automaticamente conforme a demanda. O contador é atualizado em tempo real por meio de operações atômicas no banco de dados, garantindo consistência mesmo sob alto volume de acessos simultâneos.
 
 ---
 
 # 🎯 O Problema e a Solução
 
-O projeto simula o cenário de uma startup lançando uma campanha inédita com tráfego imprevisível. Como métricas indicam que 53% dos visitantes abandonam páginas que demoram mais de três segundos para carregar, a performance é crítica. Para evitar gargalos de lentidão e travamentos sob demanda repentina, desenvolvemos essa arquitetura 100% serverless. Ela garante resiliência e tempos de resposta na casa dos milissegundos, escalando instantaneamente para absorver desde dezenas até milhões de acessos.  
+O projeto simula o cenário de uma startup lançando uma campanha inédita com tráfego imprevisível. Como métricas indicam que 53% dos visitantes abandonam páginas que demoram mais de três segundos para carregar, a performance é crítica. 
+
+Para evitar gargalos de lentidão e travamentos sob demanda repentina, desenvolvemos essa arquitetura 100% serverless. Ela garante resiliência e tempos de resposta na casa dos milissegundos, escalando instantaneamente para absorver desde dezenas até milhões de acessos.
 
 ---
 
@@ -34,31 +38,26 @@ O projeto simula o cenário de uma startup lançando uma campanha inédita com t
 A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos seguintes serviços:
 
 ### Amazon S3
-
 * Hospedagem estática do front-end.
 * Alta disponibilidade.
 * Baixo custo.
 
 ### Amazon API Gateway
-
 * Endpoint público HTTPS.
 * Gerenciamento de requisições.
 * Configuração de políticas CORS.
 
 ### AWS Lambda
-
 * Execução da lógica de negócio.
 * Atualização do contador sob demanda.
 * Escalabilidade automática.
 
 ### Amazon DynamoDB
-
 * Banco de dados NoSQL.
 * Persistência do contador.
 * Incremento atômico do valor armazenado.
 
 ### AWS IAM
-
 * Controle de permissões.
 * Execution Roles.
 * Aplicação do princípio do menor privilégio (Least Privilege).
@@ -78,32 +77,21 @@ A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos se
 # 🛠️ Tecnologias Utilizadas
 
 ## Front-end
-
 * HTML5
 * CSS3
 * JavaScript (ES6)
 
 ## Back-end
-
 * AWS Lambda
-* Python
+* Node.js
 
 ## Banco de Dados
-
 * Amazon DynamoDB
 
-## Infraestrutura
-
-* Amazon S3
-* Amazon API Gateway
-* AWS IAM
-
 ## Infraestrutura como Código (IaC)
-
 * AWS CloudFormation
 
 ## Plataforma
-
 * Amazon Web Services (AWS)
 
 ---
@@ -122,35 +110,56 @@ A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos se
 ---
 
 # 💰 Otimização Financeira
-O modelo serverless adotado elimina qualquer custo com capacidade ociosa de servidores. A arquitetura tira máximo proveito do Free Tier (nível gratuito) da AWS, resultando em um custo operacional projetado próximo a zero, onde a cobrança ocorre estritamente pelo milissegundo de processamento e pelas requisições efetuadas.  
+
+O modelo serverless adotado elimina qualquer custo com capacidade ociosa de servidores. A arquitetura tira máximo proveito do Free Tier (nível gratuito) da AWS, resultando em um custo operacional projetado próximo a zero, onde a cobrança ocorre estritamente pelo milissegundo de processamento e pelas requisições efetuadas.
 
 ---
 
 # 🚀 Como Executar o Projeto
 
-Pré-requisitos:
-- AWS CLI instalada e configurada com suas credenciais.
+### Pré-requisitos
 
-Passo a Passo (Deploy Automatizado):
-1. Clone o repositório.
-2. Pelo terminal, execute o script de automação (deploy.sh ou deploy.bat) localizado na raiz do projeto. O pipeline do script fará o seguinte trabalho pesado:
-- Provisionamento do back-end e S3 via CloudFormation.
-- Extração dinâmica da URL da API gerada.
-- Injeção automática do endpoint no script.js do front-end.
-- Sincronização e upload dos arquivos web para o bucket S3.
+* **Python 3.x** instalado.
+* **AWS CLI** instalada e configurada com suas credenciais (`aws configure`).
+* **Boto3** (SDK da AWS para Python).
 
-3. Acesse a URL pública do site que será exibida no console ao final da execução.
+### Passo a Passo (Deploy Automatizado)
+
+1. **Clone o repositório:**
+   ```bash
+   git clone <URL_DO_REPOSITORIO
+   cd <NOME_DO_REPOSITORIO>
+   ```
+
+2. **Instale a dependência do script:**
+   ```bash
+   pip install boto3
+   ```
+
+3. **Execute o pipeline de deploy:**
+   ```bash
+   python deploy.py
+   ```
+
+O script fará todo o fluxo pesado automaticamente:
+* Provisionamento/atualização da infraestrutura na AWS via CloudFormation (`iac/template.yaml`).
+* Extração dinâmica do endpoint da API e das configurações do S3.
+* Injeção automática da URL gerada no arquivo `frontend/script.js`.
+* Sincronização e upload dos arquivos web (`index.html`, `style.css`, `script.js`) para o bucket S3.
+
+4. **Acesse o projeto:**
+   Ao final da execução, o terminal exibirá a URL pública do site no S3 para você acessar e testar o contador em tempo real.
 
 ---
 
 # 👥 Grupo 4 (AWS re/Start)
 
-* **Bruno Ruan Lima Da Silva** – GitHub | LinkedIn
-* **Christopher Bernardes Viana** – GitHub | LinkedIn
-* **David Bezerra Da Silva** – GitHub | LinkedIn
-* **Natan Ferreira Dos Santos** – GitHub | LinkedIn
-* **Gustavo Ramalho Matioli** – GitHub | LinkedIn
-* **Leticia Mikaeli Alves dos Santos** – GitHub | LinkedIn
+* **Bruno Ruan Lima Da Silva** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
+* **Christopher Bernardes Viana** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
+* **David Bezerra Da Silva** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
+* **Natan Ferreira Dos Santos** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
+* **Gustavo Ramalho Matioli** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
+* **Leticia Mikaeli Alves dos Santos** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
 
 ---
 
