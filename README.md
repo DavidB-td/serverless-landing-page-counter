@@ -189,11 +189,9 @@ O script fará todo o fluxo pesado automaticamente:
 # 👥 Grupo 4 (AWS re/Start)
 
 * **Bruno Ruan Lima Da Silva** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
-* **Christopher Bernardes Viana** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
 * **David Bezerra Da Silva** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
 * **Natan Ferreira Dos Santos** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
 * **Gustavo Ramalho Matioli** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
-* **Leticia Mikaeli Alves dos Santos** – [GitHub](https://github.com) | [LinkedIn](https://linkedin.com)
 
 ---
 
