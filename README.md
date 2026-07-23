@@ -1,34 +1,35 @@
 <!-- Badges do Topo do README -->
 <p align="left">
-  <img src="https://shields.io" alt="Status"/>
-  <img src="https://shields.io" alt="Licença"/>
+  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange?style=for-the-badge" alt="Status"/>
+  <img src="https://img.shields.io/badge/Licen%C3%A7a-MIT-blue?style=for-the-badge" alt="Licença"/>
 </p>
 
 ### 🛠️ Tecnologias e Infraestrutura Utilizadas
 
 <p align="left">
   <!-- Plataforma & IaC -->
-  <img src="https://shields.io" alt="AWS"/>
-  <img src="https://shields.io" alt="AWS CloudFormation"/>
+  <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS"/>
+  <img src="https://img.shields.io/badge/AWS_CloudFormation-FF4F8B?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS CloudFormation"/>
+
   <!-- Back-end & Scripts -->
-  <img src="https://shields.io" alt="Node.js"/>
-  <img src="https://shields.io" alt="Python"/>
-  <img src="https://shields.io" alt="Boto3"/>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js"/>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/Boto3-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="Boto3"/>
 </p>
 
 <p align="left">
   <!-- Serviços AWS Serverless -->
-  <img src="https://shields.io" alt="Amazon S3"/>
-  <img src="https://shields.io" alt="Amazon API Gateway"/>
-  <img src="https://shields.io" alt="AWS Lambda"/>
-  <img src="https://shields.io" alt="Amazon DynamoDB"/>
+  <img src="https://img.shields.io/badge/Amazon_S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white" alt="Amazon S3"/>
+  <img src="https://img.shields.io/badge/Amazon_API_Gateway-FF4F8B?style=for-the-badge&logo=amazon-api-gateway&logoColor=white" alt="Amazon API Gateway"/>
+  <img src="https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=aws-lambda&logoColor=white" alt="AWS Lambda"/>
+  <img src="https://img.shields.io/badge/Amazon_DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white" alt="Amazon DynamoDB"/>
 </p>
 
 <p align="left">
   <!-- Front-end -->
-  <img src="https://shields.io" alt="HTML5"/>
-  <img src="https://shields.io" alt="CSS3"/>
-  <img src="https://shields.io" alt="JavaScript"/>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"/>
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"/>
 </p>
 
 ---
