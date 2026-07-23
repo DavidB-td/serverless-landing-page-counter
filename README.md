@@ -17,9 +17,15 @@ Solução **serverless** para rastreamento e contabilização em tempo real de c
 
 # 📖 Sobre o Projeto
 
-O **AWS Serverless Landing Page Counter** é uma aplicação desenvolvida para registrar e contabilizar cliques de usuários em landing pages de forma segura, escalável e totalmente serverless.
+O **AWS Contador Serverless** é uma aplicação desenvolvida para registrar e contabilizar cliques de usuários em landing pages de forma segura, escalável e totalmente serverless.
 
 A arquitetura elimina a necessidade de gerenciamento de servidores, permitindo que a infraestrutura escale automaticamente conforme a demanda. O contador é atualizado em tempo real por meio de operações atômicas no banco de dados, garantindo consistência mesmo sob alto volume de acessos simultâneos.
+
+---
+
+# 🎯 O Problema e a Solução
+
+O projeto simula o cenário de uma startup lançando uma campanha inédita com tráfego imprevisível. Como métricas indicam que 53% dos visitantes abandonam páginas que demoram mais de três segundos para carregar, a performance é crítica. Para evitar gargalos de lentidão e travamentos sob demanda repentina, desenvolvemos essa arquitetura 100% serverless. Ela garante resiliência e tempos de resposta na casa dos milissegundos, escalando instantaneamente para absorver desde dezenas até milhões de acessos.  
 
 ---
 
@@ -112,6 +118,28 @@ A solução utiliza uma arquitetura **100% Serverless** na AWS composta pelos se
 * Incremento atômico do contador.
 * Segurança baseada em políticas IAM.
 * Fácil implantação utilizando Infraestrutura como Código (IaC).
+
+---
+
+# 💰 Otimização Financeira
+O modelo serverless adotado elimina qualquer custo com capacidade ociosa de servidores. A arquitetura tira máximo proveito do Free Tier (nível gratuito) da AWS, resultando em um custo operacional projetado próximo a zero, onde a cobrança ocorre estritamente pelo milissegundo de processamento e pelas requisições efetuadas.  
+
+---
+
+# 🚀 Como Executar o Projeto
+
+Pré-requisitos:
+- AWS CLI instalada e configurada com suas credenciais.
+
+Passo a Passo (Deploy Automatizado):
+1. Clone o repositório.
+2. Pelo terminal, execute o script de automação (deploy.sh ou deploy.bat) localizado na raiz do projeto. O pipeline do script fará o seguinte trabalho pesado:
+- Provisionamento do back-end e S3 via CloudFormation.
+- Extração dinâmica da URL da API gerada.
+- Injeção automática do endpoint no script.js do front-end.
+- Sincronização e upload dos arquivos web para o bucket S3.
+
+3. Acesse a URL pública do site que será exibida no console ao final da execução.
 
 ---
 

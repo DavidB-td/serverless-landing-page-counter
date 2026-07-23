@@ -1,4 +1,4 @@
-const API_URL = 'https://jnfsg3lf9i.execute-api.us-east-2.amazonaws.com/contador';
+const API_URL = 'API_POINT_GERADO_PELO_CLOUDFORMATION';
 
 const btnClique = document.getElementById('btn-clique');
 const valorContador = document.getElementById('valor');
@@ -18,7 +18,7 @@ async function buscarContadorAtual() {
 
 // 2. Função para atualizar o estado visual do botão caso já tenha sido clicado
 function verificarStatusClique() {
-    if (sessionStorage.getItem('jaClicou')) {
+    if (localStorage.getItem('jaClicou')) {
         desabilitarBotao();
     }
 }
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 4. Evento de clique para incrementar o contador
 btnClique.addEventListener('click', async () => {
     // Trava preventiva se já clicou nesta sessão
-    if (sessionStorage.getItem('jaClicou')) return;
+    if (localStorage.getItem('jaClicou')) return;
 
     desabilitarBotao();
 
@@ -52,8 +52,8 @@ btnClique.addEventListener('click', async () => {
             const data = await response.json();
             valorContador.innerText = data.quantidade || data.hits;
             
-            // Marca no sessionStorage após o sucesso da requisição
-            sessionStorage.setItem('jaClicou', 'true');
+            // Marca no localStorage após o sucesso da requisição
+            localStorage.setItem('jaClicou', 'true');
         } else {
             console.error('Erro na requisição');
             // Restaura o botão caso ocorra erro na API

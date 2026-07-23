@@ -1,0 +1,325 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Infraestrutura Serverless para Contador de Acessos de Landing Page (TCC) - Versao para Importacao'
+
+Resources:
+
+  # 0 IAM Role para os Lambdas
+  ContadorLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    DeletionPolicy: Retain
+    Properties:
+      RoleName: ContadorLambdaExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: ContadorDynamoDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:UpdateItem
+                  - dynamodb:GetItem
+                Resource: !GetAtt ContadorDynamoDBTable.Arn
+
+  # 1 Tabela do Amazon DynamoDB
+  ContadorDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: ContadorAcessos
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: ChaveContador
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ChaveContador
+          KeyType: HASH
+
+  # 2.1 AWS Lambda - Incrementador do contador
+  IncrementarContadorFunction:
+    Type: AWS::Lambda::Function
+    DeletionPolicy: Retain
+    Properties:
+      FunctionName: IncrementarContadorFunction
+      Handler: index.handler
+      Role: !GetAtt ContadorLambdaExecutionRole.Arn
+      Runtime: nodejs18.x
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ContadorDynamoDBTable
+      Code:
+        ZipFile: |
+          const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+          const { DynamoDBDocumentClient, UpdateCommand } = require("@aws-sdk/lib-dynamodb");
+
+          const client = new DynamoDBClient({});
+          const ddbDocClient = DynamoDBDocumentClient.from(client);
+
+          exports.handler = async (event) => {
+              const method = event.requestContext?.http?.method;
+
+              const corsHeaders = {
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "POST, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type",
+                  "Content-Type": "application/json"
+              };
+
+              // Responde o preflight sem tocar no banco
+              if (method === "OPTIONS") {
+                  return {
+                      statusCode: 200,
+                      headers: corsHeaders,
+                      body: ""
+                  };
+              }
+
+              // Só incrementa em POST
+              if (method !== "POST") {
+                  return {
+                      statusCode: 405,
+                      headers: corsHeaders,
+                      body: JSON.stringify({ erro: "Método não permitido" })
+                  };
+              }
+
+              const tableName = process.env.TABLE_NAME;
+
+              const params = {
+                  TableName: tableName,
+                  Key: { ChaveContador: "total_acessos" },
+                  UpdateExpression: "ADD quantidade :val",
+                  ExpressionAttributeValues: { ":val": 1 },
+                  ReturnValues: "UPDATED_NEW"
+              };
+
+              try {
+                  const data = await ddbDocClient.send(new UpdateCommand(params));
+                  return {
+                      statusCode: 200,
+                      headers: corsHeaders,
+                      body: JSON.stringify({
+                          mensagem: "Acesso registrado com sucesso!",
+                          quantidade: data.Attributes.quantidade
+                      })
+                  };
+              } catch (err) {
+                  console.error("Erro ao atualizar o DynamoDB:", err);
+                  return {
+                      statusCode: 500,
+                      headers: corsHeaders,
+                      body: JSON.stringify({ erro: "Não foi possível registrar o acesso." })
+                  };
+              }
+          };
+
+  # 2.2 AWS Lambda - Busca o valor atual do contador
+  BuscarContadorFunction:
+    Type: AWS::Lambda::Function
+    DeletionPolicy: Retain
+    Properties:
+      FunctionName: BuscarContadorFunction
+      Handler: index.handler
+      Role: !GetAtt ContadorLambdaExecutionRole.Arn
+      Runtime: nodejs18.x
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ContadorDynamoDBTable
+      Code:
+        ZipFile: |
+          const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+          const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
+
+          const client = new DynamoDBClient({});
+          const ddbDocClient = DynamoDBDocumentClient.from(client);
+
+          const corsHeaders = {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Content-Type": "application/json"
+          };
+
+          exports.handler = async (event) => {
+              const method = event.requestContext?.http?.method;
+
+              if (method === "OPTIONS") {
+                  return { statusCode: 200, headers: corsHeaders, body: "" };
+              }
+
+              const tableName = process.env.TABLE_NAME;
+
+              const params = {
+                  TableName: tableName,
+                  Key: { ChaveContador: "total_acessos" }
+              };
+
+              try {
+                  const data = await ddbDocClient.send(new GetCommand(params));
+                  return {
+                      statusCode: 200,
+                      headers: corsHeaders,
+                      body: JSON.stringify({
+                          quantidade: data.Item ? data.Item.quantidade : 0
+                      })
+                  };
+              } catch (err) {
+                  console.error("Erro ao ler o DynamoDB:", err);
+                  return {
+                      statusCode: 500,
+                      headers: corsHeaders,
+                      body: JSON.stringify({ erro: "Não foi possível buscar o contador." })
+                  };
+              }
+          };
+
+  # 3 Amazon API Gateway
+  ContadorHttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    DeletionPolicy: Retain
+    Properties:
+      Name: ContadorAcessosAPI
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - "*"
+
+  # 3.1 API Gateway - Integra o Lambda integrador com a rota /POST
+  IncrementarIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    DeletionPolicy: Retain
+    Properties:
+      ApiId: !Ref ContadorHttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt IncrementarContadorFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  # 3.2 API Gateway - Integra o Lambda de busca do contador com a rota /GET
+  BuscarIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    DeletionPolicy: Retain
+    Properties:
+      ApiId: !Ref ContadorHttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt BuscarContadorFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  # 3.3 Rota POST
+  PostContadorRoute:
+    Type: AWS::ApiGatewayV2::Route
+    DeletionPolicy: Retain
+    Properties:
+      ApiId: !Ref ContadorHttpApi
+      RouteKey: 'POST /contador'
+      Target: !Sub 'integrations/${IncrementarIntegration}'
+
+  # 3.4 Rota GET
+  GetContadorRoute:
+    Type: AWS::ApiGatewayV2::Route
+    DeletionPolicy: Retain
+    Properties:
+      ApiId: !Ref ContadorHttpApi
+      RouteKey: 'GET /contador'
+      Target: !Sub 'integrations/${BuscarIntegration}'
+
+  # 3.5 Estágio padrão que aplica limites de tráfego
+  ContadorApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    DeletionPolicy: Retain
+    DependsOn:
+      - PostContadorRoute
+      - GetContadorRoute
+    Properties:
+      ApiId: !Ref ContadorHttpApi
+      StageName: '$default'
+      AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingRateLimit: 100
+        ThrottlingBurstLimit: 50
+
+  # 4.1. Permissão para o API Gateway chamar o Lambda de incremento
+  LambdaPermissionIncrementar:
+    Type: AWS::Lambda::Permission
+    DeletionPolicy: Retain
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt IncrementarContadorFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ContadorHttpApi}/*/POST/contador"
+
+  # 4.2 Permissão para o API Gateway chamar o Lambda de GET
+  LambdaPermissionBuscar:
+    Type: AWS::Lambda::Permission
+    DeletionPolicy: Retain
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt BuscarContadorFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ContadorHttpApi}/*/GET/contador"
+
+  # 5 S3 - Hospedagem dos arquivos do front-end
+  ContadorS3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Sub "contador-landing-page-s3-${AWS::AccountId}"
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+        
+  # 6 Política do Bucket para leitura pública
+  ContadorS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ContadorS3Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Sub "${ContadorS3Bucket.Arn}/*"
+
+# Outputs: dados para configurar o script.js do front-end após  o deploy e informações gerais
+Outputs:
+  ApiEndpoint:
+    Description: "URL da API, usar este endereco + /contador na primeira linha do script.js"
+    Value: !Sub "https://${ContadorHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  TableName:
+    Description: "Nome da tabela DynamoDB criada"
+    Value: !Ref ContadorDynamoDBTable
+  IncrementarFunctionName:
+    Description: "Nome da funcao Lambda de incremento (POST)"
+    Value: !Ref IncrementarContadorFunction
+  BuscarFunctionName:
+    Description: "Nome da funcao Lambda de consulta (GET)"
+    Value: !Ref BuscarContadorFunction
+  WebsiteURL:
+    Description: "URL publica do site hospedado no S3"
+    Value: !GetAtt ContadorS3Bucket.WebsiteURL
