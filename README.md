@@ -33,9 +33,9 @@
 
 ---
 
-# AWS Serverless Landing Page Counter
+# AWS Contador Serverless
 
-Solução **serverless** para rastreamento e contabilização em tempo real de cliques em landing pages. O projeto foi desenvolvido com foco em **alta escalabilidade**, **baixa latência** e **baixo custo operacional**, utilizando o modelo **pay-per-use** da Amazon Web Services (AWS).
+Solução **serverless** para rastreamento e contabilização em tempo real de cliques em uma landing pages O projeto foi desenvolvido com foco em **alta escalabilidade**, **baixa latência** e **baixo custo operacional**, utilizando o modelo **pay-per-use** da Amazon Web Services (AWS).
 
 ---
 
