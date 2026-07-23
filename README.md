@@ -1,3 +1,40 @@
+<!-- Badges do Topo do README -->
+<p align="left">
+  <img src="https://shields.io" alt="Status"/>
+  <img src="https://shields.io" alt="Licença"/>
+</p>
+
+### 🛠️ Tecnologias e Infraestrutura Utilizadas
+
+<p align="left">
+  <!-- Plataforma & IaC -->
+  <img src="https://shields.io" alt="AWS"/>
+  <img src="https://shields.io" alt="AWS CloudFormation"/>
+  
+  <!-- Back-end & Scripts -->
+  <img src="https://shields.io" alt="Node.js"/>
+  <img src="https://shields.io" alt="Python"/>
+  <img src="https://shields.io" alt="Boto3"/>
+</p>
+
+<p align="left">
+  <!-- Serviços AWS Serverless -->
+  <img src="https://shields.io" alt="Amazon S3"/>
+  <img src="https://shields.io" alt="Amazon API Gateway"/>
+  <img src="https://shields.io" alt="AWS Lambda"/>
+  <img src="https://shields.io" alt="Amazon DynamoDB"/>
+</p>
+
+<p align="left">
+  <!-- Front-end -->
+  <img src="https://shields.io" alt="HTML5"/>
+  <img src="https://shields.io" alt="CSS3"/>
+  <img src="https://shields.io" alt="JavaScript"/>
+</p>
+
+---
+
+
 # AWS Serverless Landing Page Counter
 
 Solução **serverless** para rastreamento e contabilização em tempo real de cliques em landing pages. O projeto foi desenvolvido com foco em **alta escalabilidade**, **baixa latência** e **baixo custo operacional**, utilizando o modelo **pay-per-use** da Amazon Web Services (AWS).
@@ -127,7 +164,7 @@ O modelo serverless adotado elimina qualquer custo com capacidade ociosa de serv
 
 1. **Clone o repositório:**
    ```bash
-   git clone <URL_DO_REPOSITORIO
+   git clone <URL_DO_REPOSITORIO>
    cd <NOME_DO_REPOSITORIO>
    ```
 
