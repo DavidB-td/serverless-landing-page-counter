@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Infraestrutura Serverless para Contador de Acessos de Landing Page (TCC) - Versao para Importacao'
+Description: 'DESCRIÇÃO A SER DECIDIDA'
 
 Resources:
 
@@ -309,11 +309,14 @@ Resources:
 # Outputs: dados para configurar o script.js do front-end após  o deploy e informações gerais
 Outputs:
   ApiEndpoint:
-    Description: "URL da API, usar este endereco + /contador na primeira linha do script.js"
-    Value: !Sub "https://${ContadorHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+    Description: "URL base da API. Use este endereco + /contador no script.js"
+    Value: !GetAtt ContadorHttpApi.ApiEndpoint
   TableName:
     Description: "Nome da tabela DynamoDB criada"
     Value: !Ref ContadorDynamoDBTable
+  BucketName:
+    Description: "Nome fisico do Bucket S3 gerado para o frontend"
+    Value: !Ref ContadorS3Bucket
   IncrementarFunctionName:
     Description: "Nome da funcao Lambda de incremento (POST)"
     Value: !Ref IncrementarContadorFunction

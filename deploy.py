@@ -1,6 +1,7 @@
 import boto3
 import time
 import os
+import re
 import mimetypes
 from botocore.exceptions import ClientError
 
@@ -62,7 +63,7 @@ def main():
         waiter.wait(StackName=STACK_NAME)
         print("✅ Infraestrutura provisionada/atualizada com sucesso!")
 
-    # 4. Extração dos Outputs e Nome do Bucket
+    # 4. Extração dos Outputs diretamente da Stack
     print("\n[2/4] Extraindo Outputs e metadados da nuvem...")
     response = cf_client.describe_stacks(StackName=STACK_NAME)
     outputs = response['Stacks'][0].get('Outputs', [])
@@ -76,17 +77,13 @@ def main():
             api_endpoint = out['OutputValue']
         elif out['OutputKey'] == 'WebsiteURL':
             website_url = out['OutputValue']
-
-    # Buscando o nome físico do bucket gerado aleatoriamente
-    resources = cf_client.describe_stack_resources(StackName=STACK_NAME)
-    for res in resources['StackResources']:
-        if res['LogicalResourceId'] == 'ContadorS3Bucket':
-            bucket_name = res['PhysicalResourceId']
+        elif out['OutputKey'] == 'BucketName':
+            bucket_name = out['OutputValue']
 
     print(f"🔗 API Endpoint gerado: {api_endpoint}")
     print(f"🪣 Bucket S3 de destino: {bucket_name}")
 
-    # 5. Injeção Dinâmica da URL no Front-end
+    # 5. Injeção Dinâmica Idempotente da URL no Front-end (Regex)
     print("\n[3/4] Injetando variáveis no ambiente local...")
     script_path = os.path.join(FRONTEND_DIR, 'script.js')
     
@@ -94,12 +91,15 @@ def main():
         with open(script_path, 'r', encoding='utf-8') as f:
             script_content = f.read()
 
-        # Substitui a string pela URL real da API
-        script_content_updated = script_content.replace('API_POINT_GERADO_PELO_CLOUDFORMATION', api_endpoint)
+        # Isso funciona perfeitamente mesmo que o script seja executado 100 vezes seguidas.
+        padrao_regex = r"const API_URL = '.*?';"
+        nova_linha_url = f"const API_URL = '{api_endpoint}/contador';"
+        
+        script_content_updated = re.sub(padrao_regex, nova_linha_url, script_content)
 
         with open(script_path, 'w', encoding='utf-8') as f:
             f.write(script_content_updated)
-        print(f"✅ Arquivo {script_path} atualizado com sucesso.")
+        print(f"✅ Arquivo {script_path} atualizado via Regex com sucesso.")
     except FileNotFoundError:
         print(f"❌ Erro: Arquivo {script_path} não encontrado na pasta local.")
         return
@@ -109,10 +109,8 @@ def main():
     for root, dirs, files in os.walk(FRONTEND_DIR):
         for file in files:
             file_path = os.path.join(root, file)
-            # Define o caminho dentro do S3 mantendo a estrutura original
             s3_key = os.path.relpath(file_path, FRONTEND_DIR).replace('\\', '/')
 
-            # Mapeamento essencial do Content-Type para páginas web
             content_type, _ = mimetypes.guess_type(file_path)
             if content_type is None:
                 content_type = 'application/octet-stream'
